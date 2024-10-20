@@ -1,12 +1,10 @@
 package com.hasib.ProductParser.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 public class ProductUploadResponseDto {
     private int unchangedRows;
     private int updatedRows;
