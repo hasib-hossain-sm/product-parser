@@ -20,6 +20,6 @@ public enum FileType {
         return Arrays.stream(FileType.values())
                 .filter(type -> type.getExtension().equalsIgnoreCase(fileExtension))
                 .findFirst()
-                .orElseThrow(() -> new BadRequestException("Unsupported file type: " + fileExtension));
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported file type: " + fileExtension));
     }
 }
