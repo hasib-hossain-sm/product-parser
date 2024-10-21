@@ -3,6 +3,7 @@ package com.hasib.ProductParser.controller;
 
 import com.hasib.ProductParser.dto.ApiResponse;
 import com.hasib.ProductParser.dto.ProductUploadResponseDto;
+import com.hasib.ProductParser.model.ChangeHistory;
 import com.hasib.ProductParser.model.Product;
 import com.hasib.ProductParser.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,19 @@ public class ProductController {
                         "File uploaded successfully!",
                         HttpStatus.OK.value(),
                         responseDto
+                )
+        );
+    }
+
+    @GetMapping("/change-histories")
+    public ResponseEntity<ApiResponse<List<ChangeHistory>>> getChangeHistories() {
+
+        List<ChangeHistory> changeHistories = productService.getChangeHistories();
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Product change histories retrieved successfully.",
+                        HttpStatus.OK.value(),
+                        changeHistories
                 )
         );
     }
