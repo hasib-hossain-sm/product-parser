@@ -137,12 +137,12 @@ public class ProductControllerTest {
 
         when(productService.getProductBySku(sku)).thenReturn(product);
 
-        ResultActions resultActions = mockMvc.perform(get("/{sku}", sku))
+        ResultActions resultActions = mockMvc.perform(get("/api/products/{sku}", sku))
                 .andDo(print())
                 .andExpectAll(
                         status().isOk(),
                         MockMvcResultMatchers.jsonPath("$.message").value("Product retrieved successfully."),
-                        MockMvcResultMatchers.jsonPath("$.status").value(HttpStatus.OK.value()),
+                        MockMvcResultMatchers.jsonPath("$.statusCode").value(HttpStatus.OK.value()),
                         MockMvcResultMatchers.jsonPath("$.data.sku").value(sku),
                         MockMvcResultMatchers.jsonPath("$.data.title").value("Product 1"),
                         MockMvcResultMatchers.jsonPath("$.data.price").value(10.0),
