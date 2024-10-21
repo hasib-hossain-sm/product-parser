@@ -41,7 +41,7 @@ public class ProductService {
         FileParser parser = fileParserFactory.getParser(fileType);
 
         if (parser == null) {
-            throw new NullPointerException("Parser not found");
+            throw new NullPointerException("File Parser not found");
         }
 
         InputStream inputStream = file.getInputStream();
