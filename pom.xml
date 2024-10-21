@@ -12,7 +12,7 @@
 	<artifactId>ProductParser</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ProductParser</name>
-	<description>Demo project for Spring Boot</description>
+	<description>ProductParser is a Spring Boot-based application that parses product data from XLSX files, identifies changes (new, updated, unchanged rows), and updates a database accordingly. It includes features such as uploading XLSX files, retrieving product information, and viewing change history.</description>
 	<url/>
 	<licenses>
 		<license/>
