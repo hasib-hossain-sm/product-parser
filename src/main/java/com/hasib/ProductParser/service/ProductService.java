@@ -125,6 +125,10 @@ public class ProductService {
     }
 
     public Product getProductBySku(String sku) {
-        return null;
+        Product product = productRepository.findBySku(sku);
+        if (product == null) {
+            throw new NullPointerException("Product Not Found");
+        }
+        return product;
     }
 }
