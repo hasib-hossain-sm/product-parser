@@ -46,6 +46,19 @@ public class ProductController {
         );
     }
 
+    @GetMapping("/{sku}")
+    public ResponseEntity<ApiResponse<Product>> getProductBySku(@PathVariable String sku) {
+
+        Product product = productService.getProductBySku(sku);
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Product retrieved successfully.",
+                        HttpStatus.OK.value(),
+                        product
+                )
+        );
+    }
+
     @GetMapping("/")
     public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
 

@@ -123,4 +123,12 @@ public class ProductService {
         }
         return changeHistories;
     }
+
+    public Product getProductBySku(String sku) {
+        Product product = productRepository.findBySku(sku);
+        if (product == null) {
+            throw new NullPointerException("Product Not Found");
+        }
+        return product;
+    }
 }
