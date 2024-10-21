@@ -1,6 +1,7 @@
 package com.hasib.ProductParser.service;
 
 import com.hasib.ProductParser.dto.ProductUploadResponseDto;
+import com.hasib.ProductParser.model.ChangeHistory;
 import com.hasib.ProductParser.model.Product;
 import com.hasib.ProductParser.model.enums.FileType;
 import com.hasib.ProductParser.repository.ProductRepository;
@@ -9,6 +10,8 @@ import com.hasib.ProductParser.service.parser.FileParserFactory;
 import com.opencsv.exceptions.CsvValidationException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.history.Revision;
+import org.springframework.data.history.Revisions;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -100,5 +103,24 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public List<ChangeHistory> getChangeHistories() {
+        List<Product> products = productRepository.findAll();
+        List<ChangeHistory> changeHistories = new ArrayList<>();
+
+        for (Product product : products) {
+
+            Revisions<Integer, Product> revisions = productRepository.findRevisions(product.getId());
+            List<Product> histories = new ArrayList<>();
+
+            for (Revision<Integer, Product> revision : revisions) {
+                histories.add(revision.getEntity());
+            }
+
+            ChangeHistory changeHistory = new ChangeHistory(product, histories);
+            changeHistories.add(changeHistory);
+        }
+        return changeHistories;
     }
 }

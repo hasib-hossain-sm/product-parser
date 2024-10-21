@@ -2,6 +2,7 @@ package com.hasib.ProductParser.unitTest.controller;
 
 import com.hasib.ProductParser.controller.ProductController;
 import com.hasib.ProductParser.dto.ProductUploadResponseDto;
+import com.hasib.ProductParser.model.ChangeHistory;
 import com.hasib.ProductParser.model.Product;
 import com.hasib.ProductParser.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -103,4 +104,28 @@ public class ProductControllerTest {
                 );
     }
 
+    @Test
+    public void ProductController_getChangeHistories_ShouldReturnChangeHistories() throws Exception {
+        Product oldProduct = new Product(UUID.randomUUID(), "SKU1", "Product 1", 10.0, 5, "Old Description", null, null);
+        Product newProduct = new Product(UUID.randomUUID(), "SKU1", "Product 1", 15.0, 3, "New Description", null, null);
+
+        ChangeHistory changeHistory1 = new ChangeHistory(newProduct, List.of(oldProduct,newProduct));
+        List<ChangeHistory> changeHistories = List.of(changeHistory1);
+
+        when(productService.getChangeHistories()).thenReturn(changeHistories);
+
+        ResultActions resultActions = mockMvc.perform(get("/api/products/change-histories"))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        MockMvcResultMatchers.jsonPath("$.message").value("Product change histories retrieved successfully."),
+                        MockMvcResultMatchers.jsonPath("$.statusCode").value(HttpStatus.OK.value()),
+                        MockMvcResultMatchers.jsonPath("$.data", hasSize(1)),
+                        MockMvcResultMatchers.jsonPath("$.data[0].histories",hasSize(2)),
+                        MockMvcResultMatchers.jsonPath("$.data[0].histories[0].price").value(10),
+                        MockMvcResultMatchers.jsonPath("$.data[0].histories[1].price").value(15),
+                        MockMvcResultMatchers.jsonPath("$.data[0].histories[0].quantity").value(5),
+                        MockMvcResultMatchers.jsonPath("$.data[0].histories[1].quantity").value(3)
+                );
+    }
 }
