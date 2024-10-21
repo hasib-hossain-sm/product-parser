@@ -109,7 +109,7 @@ public class ProductControllerTest {
         Product oldProduct = new Product(UUID.randomUUID(), "SKU1", "Product 1", 10.0, 5, "Old Description", null, null);
         Product newProduct = new Product(UUID.randomUUID(), "SKU1", "Product 1", 15.0, 3, "New Description", null, null);
 
-        ChangeHistory changeHistory1 = new ChangeHistory(newProduct, List.of(oldProduct,newProduct));
+        ChangeHistory changeHistory1 = new ChangeHistory(newProduct, List.of(oldProduct, newProduct));
         List<ChangeHistory> changeHistories = List.of(changeHistory1);
 
         when(productService.getChangeHistories()).thenReturn(changeHistories);
@@ -121,11 +121,34 @@ public class ProductControllerTest {
                         MockMvcResultMatchers.jsonPath("$.message").value("Product change histories retrieved successfully."),
                         MockMvcResultMatchers.jsonPath("$.statusCode").value(HttpStatus.OK.value()),
                         MockMvcResultMatchers.jsonPath("$.data", hasSize(1)),
-                        MockMvcResultMatchers.jsonPath("$.data[0].histories",hasSize(2)),
+                        MockMvcResultMatchers.jsonPath("$.data[0].histories", hasSize(2)),
                         MockMvcResultMatchers.jsonPath("$.data[0].histories[0].price").value(10),
                         MockMvcResultMatchers.jsonPath("$.data[0].histories[1].price").value(15),
                         MockMvcResultMatchers.jsonPath("$.data[0].histories[0].quantity").value(5),
                         MockMvcResultMatchers.jsonPath("$.data[0].histories[1].quantity").value(3)
                 );
+    }
+
+    @Test
+    void ProductController_GetProductBySku_ShouldReturnProduct() throws Exception {
+
+        String sku = "SKU123";
+        Product product = new Product(UUID.randomUUID(), sku, "Product 1", 10.0, 5, "Description 1", null, null);
+
+        when(productService.getProductBySku(sku)).thenReturn(product);
+
+        ResultActions resultActions = mockMvc.perform(get("/{sku}", sku))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        MockMvcResultMatchers.jsonPath("$.message").value("Product retrieved successfully."),
+                        MockMvcResultMatchers.jsonPath("$.status").value(HttpStatus.OK.value()),
+                        MockMvcResultMatchers.jsonPath("$.data.sku").value(sku),
+                        MockMvcResultMatchers.jsonPath("$.data.title").value("Product 1"),
+                        MockMvcResultMatchers.jsonPath("$.data.price").value(10.0),
+                        MockMvcResultMatchers.jsonPath("$.data.quantity").value(5),
+                        MockMvcResultMatchers.jsonPath("$.data.description").value("Description 1")
+                );
+
     }
 }

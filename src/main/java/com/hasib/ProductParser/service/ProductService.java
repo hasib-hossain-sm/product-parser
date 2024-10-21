@@ -123,4 +123,8 @@ public class ProductService {
         }
         return changeHistories;
     }
+
+    public Product getProductBySku(String sku) {
+        return null;
+    }
 }
