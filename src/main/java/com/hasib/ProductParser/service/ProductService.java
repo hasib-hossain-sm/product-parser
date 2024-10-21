@@ -1,6 +1,7 @@
 package com.hasib.ProductParser.service;
 
 import com.hasib.ProductParser.dto.ProductUploadResponseDto;
+import com.hasib.ProductParser.model.ChangeHistory;
 import com.hasib.ProductParser.model.Product;
 import com.hasib.ProductParser.model.enums.FileType;
 import com.hasib.ProductParser.repository.ProductRepository;
@@ -100,5 +101,9 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public List<ChangeHistory> getChangeHistories() {
+        return null;
     }
 }
