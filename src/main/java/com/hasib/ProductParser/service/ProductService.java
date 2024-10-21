@@ -97,4 +97,8 @@ public class ProductService {
     private void saveOrUpdateProducts(List<Product> products) {
         productRepository.saveAll(products);
     }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 }

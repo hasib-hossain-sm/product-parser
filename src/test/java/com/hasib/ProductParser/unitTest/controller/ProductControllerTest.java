@@ -17,6 +17,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 import java.util.UUID;
@@ -90,13 +91,16 @@ public class ProductControllerTest {
 
         when(productService.getAllProducts()).thenReturn(products);
 
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.message").value("All Products retrieved successfully."))
-                .andExpect((ResultMatcher) jsonPath("$.status").value(HttpStatus.OK.value()))
-                .andExpect((ResultMatcher) jsonPath("$.data", hasSize(2)))
-                .andExpect((ResultMatcher) jsonPath("$.data[0].sku").value("SKU1"))
-                .andExpect((ResultMatcher) jsonPath("$.data[1].sku").value("SKU2"));
+        ResultActions resultActions = mockMvc.perform(get("/api/products/"))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        MockMvcResultMatchers.jsonPath("$.message").value("All Products retrieved successfully."),
+                        MockMvcResultMatchers.jsonPath("$.statusCode").value(HttpStatus.OK.value()),
+                        MockMvcResultMatchers.jsonPath("$.data", hasSize(2)),
+                        MockMvcResultMatchers.jsonPath("$.data[0].sku").value("SKU1"),
+                        MockMvcResultMatchers.jsonPath("$.data[1].sku").value("SKU2")
+                );
     }
 
 }
